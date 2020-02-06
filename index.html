@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Card Game with JS</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div id="game">
+        <table>
+            <tr>
+                <td id="0" class="letter" onclick="flipCard(this)" data-value="value">?</td>
+                <td id="1" class="letter" onclick="flipCard(this)" data-value="value">?</td>
+                <td id="2" class="letter" onclick="flipCard(this)" data-value="value">?</td>
+                <td id="3" class="letter" onclick="flipCard(this)" data-value="value">?</td>
+            </tr>
+            <tr>
+                <td id="4" class="letter" onclick="flipCard(this)" data-value="value">?</td>
+                <td id="5" class="letter" onclick="flipCard(this)" data-value="value">?</td>
+                <td id="6" class="letter" onclick="flipCard(this)" data-value="value">?</td>
+                <td id="7" class="letter" onclick="flipCard(this)" data-value="value">?</td>
+            </tr>
+            <tr>
+                <td id="8" class="letter" onclick="flipCard(this)" data-value="value">?</td>
+                <td id="9" class="letter" onclick="flipCard(this)" data-value="value">?</td>
+                <td id="10" class="letter" onclick="flipCard(this)" data-value="value">?</td>
+                <td id="11" class="letter" onclick="flipCard(this)" data-value="value">?</td>
+            </tr>
+            <tr>
+                <td id="12" class="letter" onclick="flipCard(this)" data-valor="value">?</td>
+                <td id="13" class="letter" onclick="flipCard(this)" data-valor="value">?</td>
+                <td id="14" class="letter" onclick="flipCard(this)" data-valor="value">?</td>
+                <td id="15" class="letter" onclick="flipCard(this)" data-valor="value">?</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="center">
+        <input type="button" value="Start game" onclick="startGame()">
+        <input type="button" value="Reset game" onclick="resetGame()">
+    </div>
+    <script>
+        var cards = new Array(
+            { name: "1", selected: false },
+            { name: "2", selected: false },
+            { name: "3", selected: false },
+            { name: "4", selected: false },
+            { name: "5", selected: false },
+            { name: "6", selected: false },
+            { name: "7", selected: false },
+            { name: "8", selected: false },
+            { name: "1", selected: false },
+            { name: "2", selected: false },
+            { name: "3", selected: false },
+            { name: "4", selected: false },
+            { name: "5", selected: false },
+            { name: "6", selected: false },
+            { name: "7", selected: false },
+            { name: "8", selected: false });
+        var move1 = "";
+        var move2 = "";
+        var id1 = "";
+        var id2 = "";
+
+        function startGame() {
+            var data = document.getElementById("game");
+            data.style.opacity = 1;
+
+            cards.sort(function () { return Math.random() - 0.5 });
+            for (var i = 0; i < 16; i++) {
+                var card = cards[i].name;
+                var value = document.getElementById(i.toString());
+                value.dataset.value = card;
+            }
+        };
+
+        function flipCard(e) {
+            move2 = e.dataset.value;
+            id2 = e.id;
+
+            if (move1 !== "") {
+
+                if (move1 === move2 && id1 !== id2 && cards[parseInt(id1)].selected != true && cards[parseInt(id2)].selected != true) {
+                    changeColor(id2, "blue", move2);
+                    clear();
+                    verify();
+                } else {
+                    setTimeout(function () {
+                        changeColor(id1, "black", "?");
+                        changeColor(id2, "black", "?");
+                        clear();
+                    }, 1000);
+                    changeColor(id2, "blue", move2);
+
+                }
+
+            } else if (move2 !== "value") {
+                changeColor(id2, "blue", move2)
+                move1 = move2;
+                id1 = id2;
+            }
+        };
+
+        function changeColor(position, color, content) {
+            document.getElementById(position.toString()).style.backgroundColor = color;
+            document.getElementById(position.toString()).innerHTML = content;
+        }
+
+        function clear() {
+            move1 = "";
+            move2 = "";
+
+            id1 = "";
+            id2 = "";
+        }
+
+        function verify(){
+            var successes = 0;
+            for (var i = 0; i < 16; i++) {
+                if (cards[i].selected == true) {
+                    successes++;
+                }
+            }
+
+            if (successes == 16){
+                document.getElementById("game").innerHTML = "You Win!"
+            }
+
+            
+        }
+
+    </script>
+</body>
+
+</html>
